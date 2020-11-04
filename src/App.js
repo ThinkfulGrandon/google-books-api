@@ -79,7 +79,7 @@ handleSubmit(e) {
         dataArray: [...this.state.dataArray, data]
       })
       console.log(this.state.dataArray[0])
-      this.generateContent()
+      
     })
     .catch(err => {
       console.log(err)
@@ -105,7 +105,7 @@ handleSubmit(e) {
           />
         </form>
         <div className="results">
-          {/* {this.state.dataArray == [] ? "" : {enerateContent()} */}
+          {this.state.dataArray == [] ? "" : generateContent()}
         </div>
       </div>
     );
