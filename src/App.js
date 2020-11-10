@@ -105,7 +105,7 @@ handleSubmit(e) {
           />
         </form>
         <div className="results">
-          {this.state.dataArray == [] ? "" : generateContent()}
+          {this.state.dataArray === [] ? <h3>hi</h3> : ''}
         </div>
       </div>
     );
