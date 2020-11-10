@@ -12,7 +12,7 @@ class App extends Component {
       title: "",
       count: 0,
       print: "books",
-      dataArray: []
+      dataArray: [],
     }
 }
 
@@ -105,7 +105,7 @@ handleSubmit(e) {
           />
         </form>
         <div className="results">
-          {this.state.dataArray === [] ? <h3>hi</h3> : ''}
+          {this.state.dataArray === [] ? <h3>hi</h3> : 'hdy'}
         </div>
       </div>
     );
