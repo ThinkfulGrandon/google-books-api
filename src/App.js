@@ -13,21 +13,62 @@ class App extends Component {
       count: 0,
       print: "books",
       dataArray: [],
+      currentTabIndex: null,
     }
 }
 
-generateContent() {
-  console.log("HERE", this.state.dataArray[0].items)
-  return(
-    this.state.dataArray[0].items
-      .map((book, idx) => {
-        <div key={idx}>
-          <h3>{book.title}</h3>
-          <h4>{book.authors}</h4>
-        </div>
-    })
+renderContent = () => {
+  let book = this.state.dataArray[0].items[this.state.currentTabIndex]
+  return (
+        
+      <div>
+          <p>Category: {book.volumeInfo.categories}</p>
+          <p>Rating: {book.volumeInfo.averageRating}</p>
+          <p>Description:{ book.volumeInfo.description}</p>
+          <p>Published: {book.volumeInfo.publishedDate}</p>
+          <img src={book.volumeInfo.imageLinks.smallThumbnail}/>
+
+          
+      </div>
+/*
+<p>Description: book.volumeInfo.description</p>
+<p>Published: book.volumeInfo.publishedDate</p>
+<img src=`${book.volumeInfo.imageLinks.smallThumbnail}`/>
+*/
   )
 }
+
+handleTitleClick = (idx) => {
+  this.setState({
+    currentTabIndex: idx
+  })
+}
+
+
+  generateContent() {
+    return(
+      this.state.dataArray[0].items
+        .map((book, idx) => {
+            return(
+              <div key={idx}>
+                <button 
+                  key={idx}
+                  onClick={() => this.handleTitleClick(idx)}
+                >
+                  <h3 key={idx}>{book.volumeInfo.title}</h3>
+                </button>
+                
+                <h4>{book.volumeInfo.authors}</h4>
+                {this.state.currentTabIndex === idx ? this.renderContent() : ""}
+                <hr/>
+              </div>
+              
+            )
+      })
+    )
+  }
+
+
 
 handleTitleChange(title) {
   this.setState({
@@ -39,7 +80,6 @@ handleCountChange(count) {
   this.setState({
     count
   })
-
 }
 
 handlePrintChange(print) {
@@ -51,8 +91,9 @@ handlePrintChange(print) {
 
 handleSubmit(e) {
   e.preventDefault();
-  const {title, count, print} = this.state;
-  const bookmark = {title, count, print};
+  this.setState({
+    dataArray: []
+  })
   const p = this.state.title
   const p1 = `intitle=${this.state.title}&`
   const p2 = `maxResults=${this.state.count}&`
@@ -62,7 +103,7 @@ handleSubmit(e) {
     method: 'GET',
     headers: new Headers({
       "key": "AIzaSyC7g7e-ge6K9BZUzxhkPxE9boDCPEG5Plg",
-
+      "Access-Control-Allow-Origin" : "*",
     })
   };
 
@@ -78,7 +119,6 @@ handleSubmit(e) {
       this.setState({
         dataArray: [...this.state.dataArray, data]
       })
-      console.log(this.state.dataArray[0])
       
     })
     .catch(err => {
@@ -88,6 +128,7 @@ handleSubmit(e) {
 
 
   render() {
+
     return (
       <div className="App">
         <header>
@@ -105,7 +146,10 @@ handleSubmit(e) {
           />
         </form>
         <div className="results">
-          {this.state.dataArray === [] ? <h3>hi</h3> : 'hdy'}
+          {this.state.dataArray.length === 0 
+            ? "" 
+            : this.generateContent()
+          }
         </div>
       </div>
     );
